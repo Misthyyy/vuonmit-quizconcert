@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import CategorySelection from "../components/quiz/CategorySelection";
-import { QuizCategory } from "../types/quiz";
-import { fetchCategories } from "../services/sheetApi";
+import React, { useEffect } from "react";
+// import CategorySelection from "../components/quiz/CategorySelection";
+// import { QuizCategory } from "../types/quiz";
+// import { fetchCategories } from "../services/sheetApi";
 import { Banner } from "../components/Banner";
 
 const HomePage: React.FC = () => {
-  const [categories, setCategories] = useState<QuizCategory[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [categories, setCategories] = useState<QuizCategory[]>([]);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const data = await fetchCategories();
-        setCategories(data);
+        // const data = await fetchCategories();
+        // setCategories(data);
       } catch (error) {
         console.error("Failed to load categories:", error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
