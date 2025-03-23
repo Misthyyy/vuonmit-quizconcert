@@ -25,14 +25,14 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Banner />
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      {/* <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <header className="text-center mb-8">
           <h1 className="text-3xl font-pixel text-pixelpink-500 mb-2">QUIZ</h1>
           <p className="font-pixel text-sm">Chọn chủ đề để bắt đầu</p>
         </header>
 
         <CategorySelection categories={categories} loading={loading} />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,46 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
-// Color variables (from tailwind.config.ts)
-$pixelpink-100: #ffd6e0;
-$pixelpink-200: #ffacc1;
-$pixelpink-300: #ff85a6;
-$pixelpink-400: #ff5c8d;
-$pixelpink-500: #ff337a;
+// // Color variables (from tailwind.config.ts)
+// $pixelpink-100: #ffd6e0;
+// $pixelpink-200: #ffacc1;
+// $pixelpink-300: #ff85a6;
+// $pixelpink-400: #ff5c8d;
+// $pixelpink-500: #ff337a;
 
-/* Pixel art rendering */
-img,
-button,
-.pixel-element {
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
-}
+// /* Pixel art rendering */
+// img,
+// button,
+// .pixel-element {
+//   image-rendering: pixelated;
+//   image-rendering: -moz-crisp-edges;
+//   image-rendering: crisp-edges;
+// }
 
-/* Pixel border utility */
-.pixel-border {
-  box-shadow: -4px 0 0 0 #000, 4px 0 0 0 #000, 0 -4px 0 0 #000, 0 4px 0 0 #000;
-}
+// /* Pixel border utility */
+// .pixel-border {
+//   box-shadow: -4px 0 0 0 #000, 4px 0 0 0 #000, 0 -4px 0 0 #000, 0 4px 0 0 #000;
+// }
 
-body {
-  background-color: $pixelpink-100;
-  background-image: linear-gradient($pixelpink-200 1px, transparent 1px),
-    linear-gradient(90deg, $pixelpink-200 1px, transparent 1px);
-  background-size: 20px 20px;
-  font-family: "Press Start 2P", cursive;
-}
+// body {
+//   // background-color: $pixelpink-100;
+//   background-image: linear-gradient($pixelpink-200 1px, transparent 1px),
+//     linear-gradient(90deg, $pixelpink-200 1px, transparent 1px);
+//   background-size: 20px 20px;
+//   font-family: "Press Start 2P", cursive;
+// }
 
-/* Pastel gaming buttons */
-.pixel-button {
-  background-color: $pixelpink-300;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  position: relative;
-  transition: all 0.1s;
-  box-shadow: 0 6px 0 0 $pixelpink-500, 0 8px 0 0 #000;
+// /* Pastel gaming buttons */
+// .pixel-button {
+//   background-color: $pixelpink-300;
+//   color: white;
+//   border: none;
+//   padding: 12px 20px;
+//   position: relative;
+//   transition: all 0.1s;
+//   box-shadow: 0 6px 0 0 $pixelpink-500, 0 8px 0 0 #000;
 
-  &:active {
-    transform: translateY(6px);
-    box-shadow: 0 2px 0 0 #000;
-  }
-}
+//   &:active {
+//     transform: translateY(6px);
+//     box-shadow: 0 2px 0 0 #000;
+//   }
+// }
