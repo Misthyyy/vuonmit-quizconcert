@@ -9,7 +9,7 @@ export type QuizQuestion = {
   id: string;
   question: string;
   options: string[];
-  correctAnswer: number;
+  correctAnswer: string;
   category: string;
   timeLimit: number;
 };

@@ -25,7 +25,6 @@ export const fetchQuestionsByCategory = async (
   const response = await axios.get(
     `${BASE_URL}/values/Question${categoryId}?key=${API_KEY}`
   );
-  console.log(response.data.values);
 
   return response.data.values.slice(1).map((row: any[]) => {
     const options = row.slice(2, 6);

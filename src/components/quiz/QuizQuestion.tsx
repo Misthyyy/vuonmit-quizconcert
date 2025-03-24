@@ -15,8 +15,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onAnswer }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
 
+  // Load previous answer from localStorage
   useEffect(() => {
     setShuffledOptions(shuffleArray(question.options));
+
+    const savedAnswer = localStorage.getItem(`quiz_answer_${question.id}`);
+    if (savedAnswer) {
+      const { answer } = JSON.parse(savedAnswer);
+      setSelectedOption(answer);
+    }
   }, [question]);
 
   useEffect(() => {
@@ -35,29 +42,31 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onAnswer }) => {
   }, [question, onAnswer]);
 
   const handleOptionSelect = (option: string) => {
-    if (selectedOption !== null) return;
+    if (selectedOption !== null) return; // Prevent re-answering
+
     setSelectedOption(option);
+    const isCorrect = option === question.correctAnswer;
+
+    // Save answer in localStorage
+    localStorage.setItem(
+      `quiz_answer_${question.id}`,
+      JSON.stringify({ answer: option, isCorrect })
+    );
+
     onAnswer(option, question.timeLimit - timeLeft);
   };
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <div className="mb-6 font-pixel"></div>
-
-      <div className="mb-6 font-pixel text-center pixel-border bg-white p-4">
-        {question.question}
-      </div>
-
-      <div className="grid grid-cols-1 gap-3">
+      <div className="quiz-question">{question.question}</div>
+      <div className="grid grid-cols-1">
         {shuffledOptions.map((option, index) => (
           <button
             key={index}
             onClick={() => handleOptionSelect(option)}
             disabled={selectedOption !== null}
-            className={`pixel-button text-left p-4 ${
-              selectedOption === option
-                ? "bg-pixelpink-400"
-                : "bg-pixelpink-200"
+            className={`pixel-button ${
+              selectedOption === option ? "selected" : ""
             }`}
           >
             {option}
