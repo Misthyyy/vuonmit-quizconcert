@@ -8,12 +8,12 @@ import { fetchQuestionsByCategory } from "../services/sheetApi";
 const QuizPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [currentResult, setCurrentResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
-  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [currentQuestion, setCurrentQuestion] =
+    useState<QuizQuestionType | null>(null);
 
   useEffect(() => {
     if (!categoryId) {
@@ -24,14 +24,13 @@ const QuizPage: React.FC = () => {
     const loadQuestions = async () => {
       try {
         const data = await fetchQuestionsByCategory(categoryId);
-        if (data.length === 0) {
-          navigate("/");
-          return;
-        }
+        console.log("data", data);
 
-        // Randomize questions order
-        const shuffled = [...data].sort(() => 0.5 - Math.random());
-        setQuestions(shuffled.slice(0, 10)); // Limit to 10 questions
+        // Pick a random question
+        const randomQuestion = data[Math.floor(Math.random() * data.length)];
+        console.log("random", randomQuestion);
+        setCurrentQuestion(randomQuestion);
+        setTimeLeft(randomQuestion.timeLimit);
       } catch (error) {
         console.error("Failed to load questions:", error);
         navigate("/");
@@ -43,71 +42,60 @@ const QuizPage: React.FC = () => {
     loadQuestions();
   }, [categoryId, navigate]);
 
-  const handleAnswer = (selectedOption: number, timeSpent: number) => {
-    if (!questions.length) return;
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+    const timer = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
 
-    const currentQuestion = questions[currentQuestionIndex];
-    const isCorrect = selectedOption === currentQuestion.correctAnswer;
+  const handleAnswer = (selectedOption: string) => {
+    if (!currentQuestion) return;
 
-    if (isCorrect) {
-      setScore((prev) => prev + 1);
-    }
+    const isCorrect = Number(selectedOption) === currentQuestion.correctAnswer;
 
     const result: QuizResult = {
       questionId: currentQuestion.id,
       isCorrect,
-      userAnswer: selectedOption === -1 ? null : selectedOption,
-      timeSpent,
+      userAnswer: Number(selectedOption),
+      timeSpent: currentQuestion.timeLimit - timeLeft,
     };
 
     setCurrentResult(result);
     setShowResult(true);
   };
 
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex + 1 < questions.length) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-      setShowResult(false);
-    } else {
-      navigate(`/results?score=${score}&total=${questions.length}`);
-    }
-  };
-
   if (loading) {
     return (
       <div className="text-center font-pixel text-pixelpink-500 p-8">
-        Loading quiz...
+        Đang tải câu hỏi ... Chờ xíu nha
       </div>
     );
   }
 
-  if (!questions.length) {
+  if (!currentQuestion) {
     return (
       <div className="text-center font-pixel text-pixelpink-500 p-8">
-        No questions found
+        Hỏng có câu hỏi nào trong chủ đề này cả. Chọn chủ đề khác nhé!
       </div>
     );
   }
-
-  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div className="min-h-screen p-4">
-      <header className="text-center mb-8">
-        <h1 className="text-xl font-pixel text-pixelpink-500 mb-2">
-          Question {currentQuestionIndex + 1}/{questions.length}
-        </h1>
-        <div className="text-sm font-pixel">Score: {score}</div>
-      </header>
-
       {showResult && currentResult ? (
-        <ResultScreen
-          question={currentQuestion}
-          result={currentResult}
-          onNextQuestion={handleNextQuestion}
-        />
+        <ResultScreen result={currentResult} />
       ) : (
-        <QuizQuestion question={currentQuestion} onAnswer={handleAnswer} />
+        <>
+          <header className="text-center mb-8">
+            <h1 className="text-xl font-pixel text-pixelpink-500 mb-2">
+              Câu hỏi
+            </h1>
+            <div className="text-sm font-pixel text-red-500">
+              Thời gian: {timeLeft}s
+            </div>
+          </header>
+          <QuizQuestion question={currentQuestion} onAnswer={handleAnswer} />
+        </>
       )}
     </div>
   );
