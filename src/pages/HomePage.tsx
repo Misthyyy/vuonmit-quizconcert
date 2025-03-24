@@ -27,7 +27,11 @@ const HomePage: React.FC = () => {
       <Container>
         <Row className="align-items-center">
           <div>
-            <img src="/img/quiz.png" alt="Header Img" />
+            <img
+              src="/img/quiz.png"
+              alt="Header Img"
+              style={{ maxWidth: "350px", width: "100%" }}
+            />
 
             <span className="tagline">Chọn chủ đề để bắt đầu</span>
 
