@@ -69,7 +69,13 @@ const QuizPage: React.FC = () => {
     setCurrentResult(result);
     setShowPopup(true); // Show popup and stop countdown
 
-    // Trigger effect
+    // Save result in localStorage to prevent re-answering
+    localStorage.setItem(
+      `quiz_answer_${currentQuestion.id}`,
+      JSON.stringify({ answer: selectedOption, isCorrect })
+    );
+
+    // Trigger animation effect
     setTriggerEffect(true);
   };
 
