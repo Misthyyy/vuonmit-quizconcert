@@ -4,7 +4,7 @@ import { QuizQuestion, QuizCategory } from "../types/quiz";
 
 const SHEET_ID = "1BwF_5IR_0MGFD_yHugypiBKN5qMNHWA5vQcT7QeCqf4";
 const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
-const API_KEY = "AIzaSyADK7u-ptZPZZSpRnS-RQk1vgcIRRgd46w";
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string;
 
 export const fetchCategories = async (): Promise<QuizCategory[]> => {
   const response = await axios.get(

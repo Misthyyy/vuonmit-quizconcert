@@ -14,7 +14,7 @@ body {
   background-color: #121212 !important;
   color: #fff !important;
   font-family: "Denk One", sans-serif !important;
-  background-image: url("./assets/img/banner-bg.png");
+  background-image: url("/img/banner-bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
