@@ -138,11 +138,7 @@ const QuizPage: React.FC = () => {
         >
           <div className="quiz-popup-content">
             <img
-              src={
-                currentResult.isCorrect
-                  ? "/src/assets/img/0002.png"
-                  : "/src/assets/img/0001.png"
-              }
+              src={currentResult.isCorrect ? "/img/0002.png" : "/img/0001.png"}
               alt={currentResult.isCorrect ? "Correct" : "Wrong"}
               className="popup-image"
             />
