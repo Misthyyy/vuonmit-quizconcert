@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import QuizQuestion from "../components/quiz/QuizQuestion";
-import ResultScreen from "../components/quiz/ResultScreen";
 import { QuizQuestion as QuizQuestionType, QuizResult } from "../types/quiz";
 import { fetchQuestionsByCategory } from "../services/sheetApi";
+import ReactConfetti from "react-confetti";
+import { useWindowSize } from "react-use"; // Helps get screen size
 
 const QuizPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
-  const [showResult, setShowResult] = useState(false);
   const [currentResult, setCurrentResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
   const [currentQuestion, setCurrentQuestion] =
     useState<QuizQuestionType | null>(null);
+  const [showPopup, setShowPopup] = useState(false); // Controls popup visibility
+  const [triggerEffect, setTriggerEffect] = useState(false); // Controls animation effects
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     if (!categoryId) {
@@ -24,11 +27,7 @@ const QuizPage: React.FC = () => {
     const loadQuestions = async () => {
       try {
         const data = await fetchQuestionsByCategory(categoryId);
-        console.log("data", data);
-
-        // Pick a random question
         const randomQuestion = data[Math.floor(Math.random() * data.length)];
-        console.log("random", randomQuestion);
         setCurrentQuestion(randomQuestion);
         setTimeLeft(randomQuestion.timeLimit);
       } catch (error) {
@@ -43,15 +42,22 @@ const QuizPage: React.FC = () => {
   }, [categoryId, navigate]);
 
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (timeLeft <= 0 || showPopup) return;
     const timer = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [timeLeft, showPopup]);
+
+  useEffect(() => {
+    if (triggerEffect) {
+      const timer = setTimeout(() => setTriggerEffect(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [triggerEffect]);
 
   const handleAnswer = (selectedOption: string) => {
     if (!currentQuestion) return;
 
-    const isCorrect = Number(selectedOption) === currentQuestion.correctAnswer;
+    const isCorrect = selectedOption === currentQuestion.correctAnswer;
 
     const result: QuizResult = {
       questionId: currentQuestion.id,
@@ -61,7 +67,10 @@ const QuizPage: React.FC = () => {
     };
 
     setCurrentResult(result);
-    setShowResult(true);
+    setShowPopup(true); // Show popup and stop countdown
+
+    // Trigger effect
+    setTriggerEffect(true);
   };
 
   if (loading) {
@@ -81,21 +90,58 @@ const QuizPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      {showResult && currentResult ? (
-        <ResultScreen result={currentResult} />
-      ) : (
-        <>
-          <header className="text-center mb-8">
-            <h1 className="text-xl font-pixel text-pixelpink-500 mb-2">
-              Câu hỏi
-            </h1>
-            <div className="text-sm font-pixel text-red-500">
-              Thời gian: {timeLeft}s
-            </div>
-          </header>
-          <QuizQuestion question={currentQuestion} onAnswer={handleAnswer} />
-        </>
+    <div className="min-h-screen p-4 relative">
+      {triggerEffect && currentResult?.isCorrect && (
+        <ReactConfetti
+          width={width}
+          height={height}
+          style={{ position: "fixed", top: 0, left: 0, zIndex: 9999 }}
+        />
+      )}
+      <header className="quiz-header">
+        <h1 className="quiz-title">Câu hỏi</h1>
+        <div className="quiz-timer-container">
+          <svg width="70" height="70">
+            <circle
+              className="quiz-timer-circle"
+              cx="35"
+              cy="35"
+              r="30"
+              strokeWidth="5"
+              strokeDasharray={2 * Math.PI * 30}
+              strokeDashoffset={
+                ((currentQuestion.timeLimit - timeLeft) /
+                  currentQuestion.timeLimit) *
+                2 *
+                Math.PI *
+                30
+              }
+            />
+          </svg>
+          <div className="quiz-timer-text">{timeLeft}s</div>
+        </div>
+      </header>
+
+      <QuizQuestion question={currentQuestion} onAnswer={handleAnswer} />
+
+      {showPopup && currentResult && (
+        <div
+          className={`quiz-popup ${
+            triggerEffect && !currentResult?.isCorrect ? "shake" : ""
+          }`}
+        >
+          <div className="quiz-popup-content">
+            <img
+              src={
+                currentResult.isCorrect
+                  ? "/src/assets/img/0002.png"
+                  : "/src/assets/img/0001.png"
+              }
+              alt={currentResult.isCorrect ? "Correct" : "Wrong"}
+              className="popup-image"
+            />
+          </div>
+        </div>
       )}
     </div>
   );

@@ -17,9 +17,11 @@
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-bootstrap-icons": "^1.11.5",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.0.0",
     "react-on-screen": "^2.1.1",
-    "react-router-dom": "^7.4.0"
+    "react-router-dom": "^7.4.0",
+    "react-use": "^17.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
