@@ -57,19 +57,12 @@ p.success {
 p.danger {
   color: red;
 }
-/************ Banner Css ************/
 
+/************ Banner Css ************/
 .banner .tagline {
   font-weight: 700;
   letter-spacing: 0.8px;
   padding: 8px 10px;
-  /* background: linear-gradient(
-    90.21deg,
-    rgba(170, 54, 124, 0.5) -5.91%,
-    rgba(74, 47, 189, 0.5) 111.58%
-  ); */
-
-  /* border: 1px solid rgba(255, 255, 255, 0.5); */
   font-size: 35px;
   margin-bottom: 16px;
   display: inline-block;
@@ -81,6 +74,7 @@ p.danger {
   display: block;
   margin: 0 auto;
 }
+
 @keyframes updown {
   0% {
     transform: translateY(-20px);
@@ -92,11 +86,12 @@ p.danger {
     transform: translateY(-20px);
   }
 }
+
 .txt-rotate > .wrap {
   border-right: 0.08em solid #666;
 }
 
-/* Color variables (replacing SCSS variables with actual values) */
+/* Color variables */
 :root {
   --pixelpink-100: #ffd6e0;
   --pixelpink-200: #ffacc1;
@@ -110,17 +105,9 @@ p.danger {
   font-size: 25px;
   margin: 5px;
   color: white;
-  background-color: rgba(
-    255,
-    182,
-    193,
-    0.5
-  ); /* Adjust the alpha (0.0 to 1.0) */
-
+  background-color: rgba(255, 182, 193, 0.5);
   border: none;
   padding: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
   text-transform: uppercase;
   transition: all 0.1s;
   align-items: center;
@@ -131,11 +118,13 @@ p.danger {
   cursor: pointer;
   margin: 10px;
 }
+
 .pixel-button:active {
   transform: translateY(6px);
   box-shadow: 0 2px 0 0 #000;
   background-color: var(--pixelpink-300);
 }
+
 .pixel-button:hover {
   transform: scale(1.1);
   box-shadow: 0 8px 16px rgba(255, 51, 122, 0.6);
@@ -153,36 +142,33 @@ p.danger {
 }
 
 .quiz-popup {
-  position: fixed; /* Cover the entire screen */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it appears on top */
+  z-index: 1000;
 }
 
 .quiz-popup-content {
-  border-radius: 20px; /* Rounded corners */
+  border-radius: 20px;
   max-width: 800px;
-
   width: 80%;
   box-shadow: 0px 4px 10px rgba(255, 51, 122, 0.4);
 }
 
 .popup-image {
   max-width: 800px;
-  border-radius: 20px; /* Rounded corners */
+  border-radius: 20px;
   width: 100%;
-
   height: auto;
   object-fit: contain;
 }
 
-/* Header layout */
 .quiz-header {
   display: flex;
   justify-content: space-between;
@@ -191,19 +177,15 @@ p.danger {
   position: relative;
 }
 
-/* Title style */
 .quiz-title {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: #fff;
   margin: 0;
 }
 
-/* Timer Container */
 .quiz-timer-container {
-  position: absolute;
-  top: 2px;
-  right: 20px;
+  position: relative;
   width: 70px;
   height: 70px;
   display: flex;
@@ -211,10 +193,9 @@ p.danger {
   justify-content: center;
 }
 
-/* Timer Circle */
 .quiz-timer-circle {
   fill: none;
-  stroke: rgba(255, 99, 71, 0.9); /* Semi-transparent red */
+  stroke: var(--pixelpink-500);
   stroke-width: 5;
   stroke-linecap: round;
   transition: stroke-dashoffset 1s linear;
@@ -222,10 +203,9 @@ p.danger {
   transform-origin: center;
 }
 
-/* Timer Text */
 .quiz-timer-text {
   position: absolute;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   color: #fff;
 }

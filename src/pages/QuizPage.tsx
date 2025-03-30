@@ -5,6 +5,7 @@ import { QuizQuestion as QuizQuestionType, QuizResult } from "../types/quiz";
 import { fetchQuestionsByCategory } from "../services/sheetApi";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "react-use"; // Helps get screen size
+import { useQuizStore } from "../components/quiz/quizStore";
 
 const QuizPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -57,6 +58,9 @@ const QuizPage: React.FC = () => {
   const handleAnswer = (selectedOption: string) => {
     if (!currentQuestion) return;
 
+    const { hasAnswered, markAnswered } = useQuizStore.getState();
+    if (hasAnswered(currentQuestion.id)) return;
+
     const isCorrect = selectedOption === currentQuestion.correctAnswer;
 
     const result: QuizResult = {
@@ -66,18 +70,23 @@ const QuizPage: React.FC = () => {
       timeSpent: currentQuestion.timeLimit - timeLeft,
     };
 
-    setCurrentResult(result);
-    setShowPopup(true); // Show popup and stop countdown
+    markAnswered(currentQuestion.id); // Mark question as answered
 
-    // Save result in localStorage to prevent re-answering
-    localStorage.setItem(
-      `quiz_answer_${currentQuestion.id}`,
-      JSON.stringify({ answer: selectedOption, isCorrect })
-    );
+    console.log("Result stored:", result); // Debugging
 
-    // Trigger animation effect
-    setTriggerEffect(true);
+    setTimeout(() => {
+      setCurrentResult(result);
+      setShowPopup(true);
+      setTriggerEffect(true);
+    }, 0);
   };
+
+  useEffect(() => {
+    if (currentResult) {
+      setShowPopup(true);
+      setTriggerEffect(true);
+    }
+  }, [currentResult]);
 
   if (loading) {
     return (

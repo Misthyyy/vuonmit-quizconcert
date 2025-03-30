@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { QuizQuestion } from "../../types/quiz";
+import { useQuizStore } from "./quizStore";
 
 const shuffleArray = (array: string[]) => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -16,13 +17,18 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onAnswer }) => {
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
 
   // Load previous answer from localStorage
+
   useEffect(() => {
     setShuffledOptions(shuffleArray(question.options));
 
-    const savedAnswer = localStorage.getItem(`quiz_answer_${question.id}`);
-    if (savedAnswer) {
-      const { answer } = JSON.parse(savedAnswer);
-      setSelectedOption(answer);
+    const { hasAnswered } = useQuizStore.getState();
+
+    if (hasAnswered(question.id)) {
+      const savedAnswer = localStorage.getItem(`quiz_answer_${question.id}`);
+      if (savedAnswer) {
+        const { answer } = JSON.parse(savedAnswer);
+        setSelectedOption(answer);
+      }
     }
   }, [question]);
 
@@ -42,18 +48,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onAnswer }) => {
   }, [question, onAnswer]);
 
   const handleOptionSelect = (option: string) => {
-    if (selectedOption !== null) return; // Prevent re-answering
+    const { hasAnswered, markAnswered } = useQuizStore.getState();
+
+    if (hasAnswered(question.id) || selectedOption !== null) return; // Prevent re-answering
 
     setSelectedOption(option);
-    const isCorrect = option === question.correctAnswer;
+    markAnswered(question.id); // Mark question as answered
 
-    // Save answer in localStorage
-    localStorage.setItem(
-      `quiz_answer_${question.id}`,
-      JSON.stringify({ answer: option, isCorrect })
-    );
-
-    onAnswer(option, question.timeLimit - timeLeft);
+    console.log("Selected option:", option); // Debugging
+    onAnswer(option, question.timeLimit - timeLeft); // Ensure this function is called
   };
 
   return (
