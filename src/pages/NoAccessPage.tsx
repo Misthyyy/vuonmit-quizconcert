@@ -23,7 +23,7 @@ const NoAccessPage: React.FC = () => {
         </p>
       </div>
       <img
-        src=".\public\img\no-access.png"
+        src="\img\no-access.png"
         alt="No Access"
         className="no-access-image"
       />
