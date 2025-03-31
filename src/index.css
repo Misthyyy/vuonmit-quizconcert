@@ -251,3 +251,29 @@ p.danger {
 .shake {
   animation: shake 0.5s ease-in-out;
 }
+/* no access image  */
+.no-access-image {
+  max-width: 100%;
+  height: auto;
+  width: 80%;
+  object-fit: contain;
+  right: 50%;
+}
+
+.dialogue-box {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.186);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+
+  margin-top: 50px;
+}
+
+.dialogue-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
