@@ -201,7 +201,7 @@ p.danger {
 
 /* Timer Container */
 .quiz-timer-container {
-  position: absolute;
+  position: fixed;
   top: 2px;
   right: 20px;
   width: 70px;

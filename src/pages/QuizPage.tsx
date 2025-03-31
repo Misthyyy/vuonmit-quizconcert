@@ -79,6 +79,19 @@ const QuizPage: React.FC = () => {
     setTriggerEffect(true);
   };
 
+  useEffect(() => {
+    const handleBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="text-center font-pixel text-pixelpink-500 p-8">
