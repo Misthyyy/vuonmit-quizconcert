@@ -54,8 +54,54 @@ const QuizPage: React.FC = () => {
     }
   }, [triggerEffect]);
 
+  useEffect(() => {
+    // Check if the user has visited before
+    if (!sessionStorage.getItem("quiz_access")) {
+      navigate("/no-access");
+      return;
+    }
+
+    if (!categoryId) {
+      navigate("/");
+      return;
+    }
+
+    const loadQuestions = async () => {
+      try {
+        const data = await fetchQuestionsByCategory(categoryId);
+        const randomQuestion = data[Math.floor(Math.random() * data.length)];
+        setCurrentQuestion(randomQuestion);
+        setTimeLeft(randomQuestion.timeLimit);
+      } catch (error) {
+        console.error("Failed to load questions:", error);
+        navigate("/");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadQuestions();
+  }, [categoryId, navigate]);
+
+  useEffect(() => {
+    // Mark the user as having accessed the quiz
+    sessionStorage.setItem("quiz_access", "true");
+
+    const handleBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+      sessionStorage.removeItem("quiz_access"); // Clear access when leaving
+    };
+  }, []);
+
   const handleAnswer = (selectedOption: string) => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || showPopup) return;
 
     const isCorrect = selectedOption === currentQuestion.correctAnswer;
 
@@ -69,7 +115,6 @@ const QuizPage: React.FC = () => {
     setCurrentResult(result);
     setShowPopup(true); // Show popup and stop countdown
 
-    // Save result in localStorage to prevent re-answering
     localStorage.setItem(
       `quiz_answer_${currentQuestion.id}`,
       JSON.stringify({ answer: selectedOption, isCorrect })
